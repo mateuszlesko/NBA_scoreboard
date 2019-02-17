@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime
 import requests
+import json
 
 
 class FinishedMatchesScoreboard(object):
@@ -28,6 +29,7 @@ def getTodaysDate(x):
     return string
 
 
+d = askForDate(input('date format (yyyy-mm-dd): '))
 page = requests.get('https://sports.yahoo.com/nba/scoreboard/?confId=&schedState=2&dateRange='+d)
 soup = BeautifulSoup(page.content,'html.parser')
     
@@ -61,7 +63,7 @@ for s in string:
         
 print(len(teams),len(score),sep=',')
 
-d = askForDate(input('date format (yyyy-mm-dd): '))
+
 if d == getTodaysDate(datetime.datetime.now()):
     
     '''
@@ -112,7 +114,18 @@ def WannaSave(x):
 def CreateFile():
     
     fname = '{date}.txt'.format(date=d)
+    matches={}
+    matches['team']=[]
+    for x in range(0,len(teams),1):
+        
+        matches['team'].append({
+                'name':teams[x],
+                'score':score[x]
+                })
+    with open('data.json','w+') as f:
+        json.dump(matches,f)
     
+    '''
     f = open(fname,'w+')
     string = ''
     for s1,s2 in zip(scoreboard[0::2],scoreboard[1::2]):
@@ -127,7 +140,7 @@ def CreateFile():
         
        f.write(string)
        f.write("############################### \n")
-      
+     ''' 
        
 if(WannaSave(input("If you want save results put 'Y' or 'y'"))==True):
     CreateFile()
