@@ -117,12 +117,12 @@ def CreateFile():
     matches={}
     matches['team']=[]
     for x in range(0,len(teams),1):
-        
+         
         matches['team'].append({
                 'name':teams[x],
                 'score':score[x]
                 })
-    with open('data.json','w+') as f:
+    with open('{date}.json'.format(date=d),'w+') as f:
         json.dump(matches,f)
     
     '''
